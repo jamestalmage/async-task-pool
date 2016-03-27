@@ -12,7 +12,9 @@ module.exports = function (create, opts) {
 			pendingHandlers.push(handler);
 			next();
 		};
-		handler.apply(null, request);
+		setImmediate(function () {
+			handler.apply(null, request);
+		});
 	}
 
 	function next() {
@@ -21,7 +23,11 @@ module.exports = function (create, opts) {
 				callHandler(pendingHandlers.shift(), pendingRequests.pop());
 			} else if (limit) {
 				limit--;
-				callHandler(create(), pendingRequests.pop());
+				var newHandler = create();
+				if (typeof newHandler !== 'function') {
+					throw new TypeError('createHandler must return a function, got: ' + newHandler);
+				}
+				callHandler(newHandler, pendingRequests.pop());
 			}
 		}
 	}
