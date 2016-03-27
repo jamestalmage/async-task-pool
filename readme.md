@@ -60,19 +60,19 @@ Called with no arguments. It is called once every time a new task handler is req
 
 The return value should be a `handlerCallback`, with the following signature:
 
-`handlerCallback(eventEmitter, done, ...additionalArgs)`
+##### `handlerCallback(eventEmitter, done, ...additionalArgs)`
 
-##### eventEmitter
+###### eventEmitter
 
 A new `EventEmitter` is created when a task is scheduled using the `enqueue` function. It is returned synchronously from the `enqueu` function, but will not emit any events until passed to a handler. When a handler becomes available, the stored `eventEmitter` is passed as the first argument to the handler.
 
 This `eventEmitter` is used as the main communication channel between the consumer of the throttled async task, and the task handler. As such, the consumer should not need to care which handler is servicing the task request, nor should it care if a handler was available immediately or after some delay.
 
-##### done
+###### done
 
 Since handlers are just functions which may be called multiple times, they must notify when tasks are complete and they are ready to be recalled by invoking the `done` callback. The `done` callback is passed as the second argument to the handler. It is up to the handler to ensure it is always called.
 
-##### ...additionalArgs
+###### ...additionalArgs
 
 Any arguments passed to `enqueue` will be spread as additional arguments to the handler (after `eventEmitter` and `done`).
 
