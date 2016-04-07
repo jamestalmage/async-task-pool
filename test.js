@@ -75,19 +75,19 @@ test('create gets called up to "limit" times', async t => {
 test('up to "limit" handlers are called immediately', async t => {
 	const create = setup();
 	const call = fn(create, {limit: 3});
-	t.same(create.callCounts(), []);
+	t.deepEqual(create.callCounts(), []);
 	call();
 	await immediate();
-	t.same(create.callCounts(), [1]);
+	t.deepEqual(create.callCounts(), [1]);
 	call();
 	await immediate();
-	t.same(create.callCounts(), [1, 1]);
+	t.deepEqual(create.callCounts(), [1, 1]);
 	call();
 	await immediate();
-	t.same(create.callCounts(), [1, 1, 1]);
+	t.deepEqual(create.callCounts(), [1, 1, 1]);
 	call();
 	await immediate();
-	t.same(create.callCounts(), [1, 1, 1]);
+	t.deepEqual(create.callCounts(), [1, 1, 1]);
 });
 
 test('calling doneCallback will execute newly available handler (first handler)', async t => {
@@ -98,10 +98,10 @@ test('calling doneCallback will execute newly available handler (first handler)'
 	call();
 	call();
 	await immediate();
-	t.same(create.callCounts(), [1, 1, 1]);
+	t.deepEqual(create.callCounts(), [1, 1, 1]);
 	create.handlers[0].doneCallback();
 	await immediate();
-	t.same(create.callCounts(), [2, 1, 1]);
+	t.deepEqual(create.callCounts(), [2, 1, 1]);
 });
 
 test('calling doneCallback will execute newly available handler (second handler)', async t => {
@@ -112,10 +112,10 @@ test('calling doneCallback will execute newly available handler (second handler)
 	call();
 	call();
 	await immediate();
-	t.same(create.callCounts(), [1, 1, 1]);
+	t.deepEqual(create.callCounts(), [1, 1, 1]);
 	create.handlers[1].doneCallback();
 	await immediate();
-	t.same(create.callCounts(), [1, 2, 1]);
+	t.deepEqual(create.callCounts(), [1, 2, 1]);
 });
 
 test('calling doneCallback will execute newly available handler (third handler)', async t => {
@@ -126,10 +126,10 @@ test('calling doneCallback will execute newly available handler (third handler)'
 	call();
 	call();
 	await immediate();
-	t.same(create.callCounts(), [1, 1, 1]);
+	t.deepEqual(create.callCounts(), [1, 1, 1]);
 	create.handlers[2].doneCallback();
 	await immediate();
-	t.same(create.callCounts(), [1, 1, 2]);
+	t.deepEqual(create.callCounts(), [1, 1, 2]);
 });
 
 test('if a handler is returned with `doneCallback` before limit is reached, it will be used instead of creating', async t => {
@@ -137,11 +137,11 @@ test('if a handler is returned with `doneCallback` before limit is reached, it w
 	const call = fn(create, {limit: 3});
 	call();
 	await immediate();
-	t.same(create.callCounts(), [1]);
+	t.deepEqual(create.callCounts(), [1]);
 	create.handlers[0].doneCallback();
 	call();
 	await immediate();
-	t.same(create.callCounts(), [2]);
+	t.deepEqual(create.callCounts(), [2]);
 });
 
 test('if two handlers are returned with `doneCallback` before limit is reached, they will be used instead of creating', async t => {
@@ -150,13 +150,13 @@ test('if two handlers are returned with `doneCallback` before limit is reached, 
 	call();
 	call();
 	await immediate();
-	t.same(create.callCounts(), [1, 1]);
+	t.deepEqual(create.callCounts(), [1, 1]);
 	create.handlers[1].doneCallback();
 	create.handlers[0].doneCallback();
 	call();
 	call();
 	await immediate();
-	t.same(create.callCounts(), [2, 2]);
+	t.deepEqual(create.callCounts(), [2, 2]);
 });
 
 test('handlers are reused on a "first returned" basis', async t => {
@@ -165,11 +165,11 @@ test('handlers are reused on a "first returned" basis', async t => {
 	call();
 	call();
 	await immediate();
-	t.same(create.callCounts(), [1, 1]);
+	t.deepEqual(create.callCounts(), [1, 1]);
 	create.handlers[1].doneCallback();
 	call();
 	await immediate();
-	t.same(create.callCounts(), [1, 2]);
+	t.deepEqual(create.callCounts(), [1, 2]);
 });
 
 test('after handlers are returned, pool will continue to grow as needed to reach limit', async t => {
@@ -182,7 +182,7 @@ test('after handlers are returned, pool will continue to grow as needed to reach
 	call();
 	call();
 	await immediate();
-	t.same(create.callCounts(), [1, 2, 1]);
+	t.deepEqual(create.callCounts(), [1, 2, 1]);
 });
 
 test('throws if create does not return a function', t => {
@@ -198,10 +198,10 @@ test('new args are passed to handler on doneCallback (first handler)', async t =
 	call('c');
 	call('d');
 	await immediate();
-	t.same(create.args(), [['a'], ['b'], ['c']]);
+	t.deepEqual(create.args(), [['a'], ['b'], ['c']]);
 	create.handlers[0].doneCallback();
 	await immediate();
-	t.same(create.args(), [['d'], ['b'], ['c']]);
+	t.deepEqual(create.args(), [['d'], ['b'], ['c']]);
 });
 
 test('new args are passed to handler on doneCallback (second handler)', async t => {
@@ -212,10 +212,10 @@ test('new args are passed to handler on doneCallback (second handler)', async t 
 	call('c');
 	call('d');
 	await immediate();
-	t.same(create.args(), [['a'], ['b'], ['c']]);
+	t.deepEqual(create.args(), [['a'], ['b'], ['c']]);
 	create.handlers[1].doneCallback();
 	await immediate();
-	t.same(create.args(), [['a'], ['d'], ['c']]);
+	t.deepEqual(create.args(), [['a'], ['d'], ['c']]);
 });
 
 test('new args are passed to handler on doneCallback (third handler)', async t => {
@@ -226,10 +226,10 @@ test('new args are passed to handler on doneCallback (third handler)', async t =
 	call('c');
 	call('d');
 	await immediate();
-	t.same(create.args(), [['a'], ['b'], ['c']]);
+	t.deepEqual(create.args(), [['a'], ['b'], ['c']]);
 	create.handlers[2].doneCallback();
 	await immediate();
-	t.same(create.args(), [['a'], ['b'], ['d']]);
+	t.deepEqual(create.args(), [['a'], ['b'], ['d']]);
 });
 
 test('passes an event emitter to the created callback', async t => {
@@ -251,7 +251,7 @@ test('calls handler with arguments', async t => {
 	const call = fn(create);
 	call(1, 2, 3);
 	await immediate();
-	t.same(create.handlers[0].args, [1, 2, 3]);
+	t.deepEqual(create.handlers[0].args, [1, 2, 3]);
 });
 
 test('returned event emitter is tied to the one passed to the handler', async t => {
@@ -265,8 +265,8 @@ test('returned event emitter is tied to the one passed to the handler', async t 
 	create.eventEmitter(0).emit('foo', 1, 2);
 	create.eventEmitter(1).emit('bar', 3, 4);
 
-	t.same(e1, [['foo', 1, 2]]);
-	t.same(e2, [['bar', 3, 4]]);
+	t.deepEqual(e1, [['foo', 1, 2]]);
+	t.deepEqual(e2, [['bar', 3, 4]]);
 });
 
 test('new event emitter is used for each call to handler', async t => {
@@ -282,8 +282,8 @@ test('new event emitter is used for each call to handler', async t => {
 	await immediate();
 	create.eventEmitter(0).emit('bar', 3, 4);
 
-	t.same(e1, [['foo', 1, 2]]);
-	t.same(e2, [['bar', 3, 4]]);
+	t.deepEqual(e1, [['foo', 1, 2]]);
+	t.deepEqual(e2, [['bar', 3, 4]]);
 });
 
 test('handler is not called again until the next event loop', async t => {
@@ -307,12 +307,12 @@ test('you wont miss events that fire immediately', async t => {
 		ee.emit('start');
 		done();
 	});
-	
+
 	const e1 = etoa(call());
 	const e2 = etoa(call());
-	
+
 	await immediate();
 	await immediate();
-	t.same(e1, [['start']]);
-	t.same(e2, [['start']]);
+	t.deepEqual(e1, [['start']]);
+	t.deepEqual(e2, [['start']]);
 });
